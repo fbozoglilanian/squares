@@ -1,0 +1,28 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+table#board {
+    width: 300px;
+    height: 300px;
+}
+table#board td {
+    border: black;
+    border-style: solid;
+    border-width: medium;
+    text-align: center;
+    vertical-align: middle;
+}
+
+table#board td.clicked {
+    background-color: red;
+}
+
+table#board td.square {
+    background-color: green;
+}

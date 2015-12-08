@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  h1= title
+  div
+    p Player Turn:
+        span(id="playerTurn")
+    p Player points 1:
+        span(id="points_0") 0
+    p Player points 2:
+        span(id="points_1") 0
+    button(id='restart') Restart
+  table(id='board')
