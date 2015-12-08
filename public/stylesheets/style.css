@@ -26,3 +26,7 @@ table#board td.clicked {
 table#board td.square {
     background-color: green;
 }
+
+.playerSession {
+    font-weight: bold;
+}

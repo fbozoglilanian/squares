@@ -1,10 +1,27 @@
 var board = [];
 var playerTurn = 0;
 var boardLength = 6;
+//var socket = io.connect('http://192.168.2.3:8080');
+var socket = io.connect();
+
+var playerId = null;
 
 $(function() {
     restart();
     $("#restart").click(restart);
+    socket.emit('enter-room', $("#room").html());
+    socket.on('player-id', function(id){
+        if (id == "viewer") {
+            $("#playerMode").html("Viewer");
+        } else {
+            $("#playerMode").html("");
+            playerId = id;
+            $("#localPlayer_" + id).addClass("playerSession");
+        }
+        socket.on("update-room", function(coords){
+            updateBoard(coords);
+        });
+    });
 });
 
 function restart() {
@@ -51,14 +68,26 @@ function getCellCoords(id) {
 }
 
 function cellClick() {
-    var id = $(this).attr("id");
-    var coords = getCellCoords(id);
-    if (!board[coords[0]][coords[1]].clicked) {
-        board[coords[0]][coords[1]].clicked = true;
-        $("#" + id).addClass("clicked");
-        makesASquare(id);
+    if (playerId == getCurrentPlayerId()) {
+        var id = $(this).attr("id");
+        var coords = getCellCoords(id);
+        if (!board[coords[0]][coords[1]].clicked) {
+            updateBoard(coords);
+            socket.emit('player-move', {room: $("#room").html(),
+                                        board: board,
+                                        coords: coords
+                                        });
+        }
     }
 }
+
+function updateBoard(coords) {
+    var id = coords[0] + "_" + coords[1];
+    board[coords[0]][coords[1]].clicked = true;
+    $("#" + id).addClass("clicked");
+    makesASquare(id);
+}
+
 
 function makesASquare(id) {
     console.log("Makes a Square?");
@@ -114,8 +143,8 @@ function makesASquare(id) {
             board[coords.x][coords.y].square = solution;
             $(id).removeClass("clicked");
             $(id).addClass("square");
-            addCurrentPlayerPoints(4);
         });
+        addCurrentPlayerPoints(4);
     } else {
         changePlayerTurn();
         console.log("Not yet...");
