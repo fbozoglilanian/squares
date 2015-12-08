@@ -1,6 +1,6 @@
 var board = [];
 var playerTurn = 0;
-var boardLength = 4;
+var boardLength = 6;
 
 $(function() {
     restart();
@@ -11,10 +11,11 @@ function restart() {
     board = [];
     $("#board").empty();
     playerTurn = 0;
-    console.log("Game Ready");
+    resetPoints();
     loadBoard();
     setBoardEvents();
     $("#playerTurn").html(playerTurn);
+    console.log("Game Ready");
 }
 
 
@@ -124,6 +125,12 @@ function makesASquare(id) {
 function addCurrentPlayerPoints(points) {
     $("#points_" + getCurrentPlayerId()).html(parseInt($("#points_" + getCurrentPlayerId()).html()) + points);
 }
+
+function resetPoints() {
+    $("#points_0").html(0);
+    $("#points_1").html(0);
+}
+
 
 function getCurrentPlayerId() {
     return playerTurn;
