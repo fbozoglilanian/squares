@@ -17,8 +17,10 @@ $(function() {
     socket.emit('enter-room', $("#room").html());
     socket.on('player-id', function(id){
         if (id == "viewer") {
-            $("#playerMode").html("Viewer");
-            $("#restart").hide();
+            //$("#playerMode").html("Viewer");
+            //$("#restart").hide();
+            alert("This room is full!");
+            $(location).attr('href', '/');
         } else {
             $("#playerMode").empty();
             playerId = id;

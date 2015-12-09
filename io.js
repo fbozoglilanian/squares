@@ -1,24 +1,50 @@
 var io = require('socket.io')();
 var rooms = {};
-
+var playerRooms = {};
 
 io.on('connection', function(socket) {
     socket.on('disconnect', function () {
         //Improve this!
-        console.log(socket.id);
+        console.log("Disconnect user: ", socket.id);
+        if (playerRooms[socket.id] != undefined) {
+            var room = playerRooms[socket.id].room;
+            var playerId = playerRooms[socket.id].playerId;
+
+            rooms[room].players[playerId] = undefined;
+            rooms[room].numPlayers--;
+
+
+            if (rooms[room].numPlayers == 0) {
+                delete rooms[room];
+                console.log(rooms);
+            }
+            delete playerRooms[socket.id];
+
+            console.log(rooms, playerRooms);
+        }
     });
     socket.on('enter-room', function(room){
         if (rooms[room] == undefined) {
-            rooms[room] = {players: [], viewers: [], board: [], currentPlayer: 0};
+            rooms[room] = {numPlayers: 0, players: [undefined, undefined], viewers: [], board: [], currentPlayer: 0};
         }
-        if (rooms[room].players.length < 2) { //new room
+        if (rooms[room].numPlayers < 2) { //new room
             console.log("Added user to room: " + room);
-            rooms[room].players.push(socket);
+            if (playerRooms[socket.id] == undefined) {
+                playerRooms[socket.id] = {};
+            }
+            rooms[room].numPlayers++;
+
+            var playerId = 1;
+            if (rooms[room].players[0] == undefined) {
+                playerId = 0;
+            }
+            rooms[room].players[playerId] = socket;
+            playerRooms[socket.id] = {room: room, playerId: playerId};
             socket.join(room);
-            socket.emit('player-id', rooms[room].players.length -1);
+            socket.emit('player-id', playerId);
         } else { //full room
-            rooms[room].viewers.push(socket);
-            socket.join(room);
+            /*rooms[room].viewers.push(socket);
+            socket.join(room);*/
             socket.emit('player-id', "viewer");
         }
     });
