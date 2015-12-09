@@ -43,7 +43,6 @@ function restart() {
     loadBoard();
     setBoardEvents();
     $("#playerTurn").html(playerTurn);
-    console.log("Game Ready");
 }
 
 
@@ -71,7 +70,6 @@ function setBoardEvents() {
         $(td).click(cellClick);
 
     });
-    console.log(board);
 }
 function getCellCoords(id) {
     var coords = id.split("_");
@@ -101,7 +99,6 @@ function updateBoard(coords) {
 
 
 function makesASquare(id) {
-    console.log("Makes a Square?");
     var coords = getCellCoords(id);
     var cuadrants = [];
     cuadrants.push([{x: coords[0], y:coords[1]-1},
@@ -128,7 +125,6 @@ function makesASquare(id) {
         found = true;
         var j = 0;
         $(cuadrants[i]).each(function(i, coords){
-            console.log(coords);
             partialSolution = solution;
             if (board[coords.x] != undefined) {
                 var cell = board[coords.x][coords.y];
@@ -138,7 +134,6 @@ function makesASquare(id) {
                         solution.push(coords);
                         j++;
                     }
-                    console.log(cell, found);
                 }
             }
         });
@@ -147,10 +142,8 @@ function makesASquare(id) {
     }
     if (found) {
         solution = partialSolution;
-        console.log("Square!", solution);
         $(solution).each(function(i, coords) {
             var id = "#" + coords.x + "_" + coords.y;
-            console.log(id, coords);
             board[coords.x][coords.y].square = solution;
             $(id).removeClass("clicked");
             $(id).addClass("square");
@@ -158,7 +151,6 @@ function makesASquare(id) {
         addCurrentPlayerPoints(4);
     } else {
         changePlayerTurn();
-        console.log("Not yet...");
     }
 }
 

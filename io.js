@@ -16,11 +16,8 @@ io.on('connection', function(socket) {
 
             if (rooms[room].numPlayers == 0) {
                 delete rooms[room];
-                console.log(rooms);
             }
             delete playerRooms[socket.id];
-
-            console.log(rooms, playerRooms);
         }
     });
     socket.on('enter-room', function(room){
