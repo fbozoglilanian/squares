@@ -8,18 +8,27 @@ var playerId = null;
 
 $(function() {
     restart();
-    $("#restart").click(restart);
+    $("#restart").click(function() {
+        if (playerId == getCurrentPlayerId()) {
+            restart();
+            socket.emit('reset-room', $("#room").html());
+        }
+    });
     socket.emit('enter-room', $("#room").html());
     socket.on('player-id', function(id){
         if (id == "viewer") {
             $("#playerMode").html("Viewer");
+            $("#restart").hide();
         } else {
-            $("#playerMode").html("");
+            $("#playerMode").empty();
             playerId = id;
             $("#localPlayer_" + id).addClass("playerSession");
         }
         socket.on("update-room", function(coords){
             updateBoard(coords);
+        });
+        socket.on("reset-room", function(coords){
+            restart();
         });
     });
 });

@@ -31,6 +31,22 @@ io.on('connection', function(socket) {
         }
     });
 
+    socket.on('reset-room', function(roomName){
+        //updates: {room: $("#room").html(), board: board}
+        var room = rooms[roomName];
+        var nextPlayer = (room.currentPlayer==0)?1:0;
+        rooms[roomName].board = [];
+        rooms[roomName].currentPlayer = 0;
+
+        var playerSocket = room.players[nextPlayer];
+        playerSocket.emit("reset-room");
+
+        for (var i in room.viewers) {
+            var viewerSocket = room.viewers[i];
+            viewerSocket.emit("reset-room");
+        }
+    });
+
 });
 
 module.exports = io;

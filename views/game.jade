@@ -1,0 +1,18 @@
+extends layout
+
+block content
+  h1= title
+  div
+    h2 Room:
+        span(id='room')= room
+    p Player Turn:
+        span(id="playerTurn")
+        span(id='playerMode')
+    p(id='localPlayer_0') Player points 1:
+        span(id="points_0") 0
+    p(id='localPlayer_1') Player points 2:
+        span(id="points_1") 0
+    button(id='restart') Restart
+  table(id='board')
+
+  script(src='/javascripts/game.js')
