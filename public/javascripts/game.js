@@ -10,11 +10,11 @@ var playerName = "Me";
 $(function() {
     socket = io.connect();
     playerName = prompt("Your Name");
-    if (playerName == "") {
-        playerName = "Me";
+    if (playerName == null || playerName == "") {
+        playerName = "";
     }
     hidePlayerList();
-    restart();
+    
     $("#restart").click(function() {
         if (playerId == getCurrentPlayerId()) {
             socket.emit('reset-room', $("#room").html());
