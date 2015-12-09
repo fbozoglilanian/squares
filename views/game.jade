@@ -8,11 +8,16 @@ block content
     p Player Turn:
         span(id="playerTurn")
         span(id='playerMode')
-    p(id='localPlayer_0') Player points 1:
+    p(id='localPlayer_0')
+        span(id="player_name_0")
         span(id="points_0") 0
-    p(id='localPlayer_1') Player points 2:
+        span  pts
+    p(id='localPlayer_1')
+        span(id="player_name_1")
         span(id="points_1") 0
+        span  pts
     button(id='restart') Restart
+  p(id='message')
   table(id='board')
 
   script(src='/javascripts/game.js')

@@ -2,38 +2,68 @@ var board = [];
 var playerTurn = 0;
 var boardLength = 6;
 //var socket = io.connect('http://192.168.2.3:8080');
-var socket = io.connect();
+var socket;
 
 var playerId = null;
+var playerName = "Me";
 
 $(function() {
+    socket = io.connect();
+    playerName = prompt("Your Name");
+    if (playerName == "") {
+        playerName = "Me";
+    }
+    hidePlayerList();
     restart();
     $("#restart").click(function() {
         if (playerId == getCurrentPlayerId()) {
-            restart();
             socket.emit('reset-room', $("#room").html());
         }
     });
-    socket.emit('enter-room', $("#room").html());
-    socket.on('player-id', function(id){
-        if (id == "viewer") {
+    socket.emit('enter-room', {
+                        roomName: $("#room").html(),
+                        playerName: playerName
+                    });
+
+    socket.on('update-player-list', function(players) {
+        hidePlayerList();
+        for (var i in players) {
+            var player = players[i];
+            $("#localPlayer_" + player.playerId).show();
+            $("#player_name_" + player.playerId).html(player.playerName + ": ");
+        }
+        if (players.length == 1) {
+            $("#board").hide();
+            $("#message").html("Waiting for more players...");
+        } else {
+            $("#board").show();
+            $("#message").empty();
+        }
+    });
+    socket.on('player-id', function(player){
+        if (player.id == "viewer") {
             //$("#playerMode").html("Viewer");
             //$("#restart").hide();
             alert("This room is full!");
             $(location).attr('href', '/');
         } else {
             $("#playerMode").empty();
-            playerId = id;
-            $("#localPlayer_" + id).addClass("playerSession");
+            playerId = player.id;
+            $("#localPlayer_" + player.id).addClass("playerSession");
         }
-        socket.on("update-room", function(coords){
-            updateBoard(coords);
-        });
-        socket.on("reset-room", function(coords){
-            restart();
-        });
+    });
+    socket.on("update-room", function(coords) {
+        updateBoard(coords);
+    });
+    socket.on("reset-room", function(coords) {
+        restart();
     });
 });
+
+function hidePlayerList() {
+    $("#localPlayer_0").hide();
+    $("#localPlayer_1").hide();
+}
 
 function restart() {
     board = [];
