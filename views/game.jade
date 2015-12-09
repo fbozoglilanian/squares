@@ -1,23 +1,30 @@
 extends layout
 
 block content
-  h1= title
+  div.page-header
+    h1= title
   div
-    h2 Room:
-        span(id='room')= room
-    p Player Turn:
-        span(id="playerTurn")
-        span(id='playerMode')
-    p(id='localPlayer_0')
-        span(id="player_name_0")
-        span(id="points_0") 0
-        span  pts
-    p(id='localPlayer_1')
-        span(id="player_name_1")
-        span(id="points_1") 0
-        span  pts
-    button(id='restart') Restart
-  p(id='message')
-  table(id='board')
+    div.col-md-4
+        div.panel.panel-default
+            div.panel-heading
+                h3.panel-title
+                    span= "Room: "
+                    span(id='room')= room
+            div.panel-body
+                ul.list-group
+                    li(id="player_item_0").alert.list-group-item
+                        span.glyphicon.glyphicon-user
+                        span(id="player_name_0")
+                        span(id="points_0").badge 0
+                    li(id="player_item_1").alert.list-group-item
+                        span.glyphicon.glyphicon-user
+                        span(id="player_name_1")
+                        span(id="points_1").badge 0
+                button(id='restart').btn.btn-default Restart
+                p(id='message').alert.alert-dismissible.alert-info
+  div.col-md-4
+    div.panel.panel-default
+        div.panel-body
+            table(id='board').table.table-responsive
 
   script(src='/javascripts/game.js')

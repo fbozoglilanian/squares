@@ -1,5 +1,5 @@
 var board = [];
-var playerTurn = 0;
+var playerTurn = 1;
 var boardLength = 6;
 //var socket = io.connect('http://192.168.2.3:8080');
 var socket;
@@ -8,13 +8,15 @@ var playerId = null;
 var playerName = "Me";
 
 $(function() {
+    $("#message").hide();
+
     socket = io.connect();
     playerName = prompt("Your Name");
     if (playerName == null || playerName == "") {
         playerName = "";
     }
     hidePlayerList();
-    
+
     $("#restart").click(function() {
         if (playerId == getCurrentPlayerId()) {
             socket.emit('reset-room', $("#room").html());
@@ -29,15 +31,17 @@ $(function() {
         hidePlayerList();
         for (var i in players) {
             var player = players[i];
-            $("#localPlayer_" + player.playerId).show();
+            $("#player_item_" + player.playerId).show();
             $("#player_name_" + player.playerId).html(player.playerName + ": ");
         }
         if (players.length == 1) {
             $("#board").hide();
+            $("#message").show();
             $("#message").html("Waiting for more players...");
         } else {
             $("#board").show();
             $("#message").empty();
+            $("#message").hide();
         }
     });
     socket.on('player-id', function(player){
@@ -61,18 +65,18 @@ $(function() {
 });
 
 function hidePlayerList() {
-    $("#localPlayer_0").hide();
-    $("#localPlayer_1").hide();
+    $("#player_item_0").hide();
+    $("#player_item_1").hide();
 }
 
 function restart() {
     board = [];
     $("#board").empty();
-    playerTurn = 0;
+    playerTurn = 1;
+    changePlayerTurn();
     resetPoints();
     loadBoard();
     setBoardEvents();
-    $("#playerTurn").html(playerTurn);
 }
 
 
@@ -199,8 +203,9 @@ function getCurrentPlayerId() {
 }
 
 function changePlayerTurn() {
+    $("#player_item_" + playerTurn).removeClass("alert-info");
     playerTurn = (playerTurn==1)?0:1;
-    $("#playerTurn").html(playerTurn);
+    $("#player_item_" + playerTurn).addClass("alert-info");
 }
 
 function cellClicked(cell) {

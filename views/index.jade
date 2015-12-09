@@ -1,11 +1,15 @@
 extends layout
 
 block content
-  h1= title
+  div.page-header
+    h1= title
+        small Lets make squares, Why? For Fun :)
   div
-    h2 Start Playing Squares!
-    form(method='post', id='roomNameForm')
-        p Create or join a room:
-            input(id='roomName', type="text", name='roomName')
-            button(type='submit') Go!
+    div.col-md-4
+        div
+            form(method='post', id='roomNameForm').form-horizontal
+                div.form-group
+                    label(for='roomName').control-label Create or join a room:
+                    input(id='roomName', type="text", name='roomName').form-control
+                    button(type='submit').btn.btn-default Go!
   script(src='/javascripts/index.js')
