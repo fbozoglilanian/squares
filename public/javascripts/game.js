@@ -115,7 +115,6 @@ function cellClick() {
         var id = $(this).attr("id");
         var coords = getCellCoords(id);
         if (!board[coords[0]][coords[1]].clicked) {
-            updateBoard(coords);
             socket.emit('player-move', {room: $("#room").html(),
                                         board: board,
                                         coords: coords

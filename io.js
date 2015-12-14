@@ -65,8 +65,8 @@ io.on('connection', function(socket) {
         var room = rooms[updates.room];
         room.currentPlayer = (room.currentPlayer==0)?1:0;
         room.board = updates.board;
-        var playerSocket = room.players[room.currentPlayer];
-        playerSocket.emit("update-room", updates.coords);
+        
+        io.to(roomName).emit("update-room", updates.coords);
 
         /*for (var i in room.viewers) {
             var viewerSocket = room.viewers[i];
