@@ -112,6 +112,7 @@ function getCellCoords(id) {
 
 function cellClick() {
     if (playerId == getCurrentPlayerId()) {
+        $(this).unbind('click');
         var id = $(this).attr("id");
         var coords = getCellCoords(id);
         if (!board[coords[0]][coords[1]].clicked) {
@@ -127,12 +128,11 @@ function updateBoard(coords) {
     var id = coords[0] + "_" + coords[1];
     board[coords[0]][coords[1]].clicked = true;
     $("#" + id).addClass("clicked");
-    makesASquare(id);
+    makesASquare(coords);
 }
 
 
-function makesASquare(id) {
-    var coords = getCellCoords(id);
+function makesASquare(coords) {
     var cuadrants = [];
     cuadrants.push([{x: coords[0], y:coords[1]-1},
                     {x: coords[0]+1, y:coords[1]-1},
@@ -164,7 +164,7 @@ function makesASquare(id) {
                 if (cell != undefined && cell.square == null) {
                     found = found && cellClicked(cell);
                     if (found) {
-                        solution.push(coords);
+                        partialSolution.push(coords);
                         j++;
                     }
                 }

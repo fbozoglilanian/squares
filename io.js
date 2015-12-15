@@ -26,7 +26,7 @@ io.on('connection', function(socket) {
             rooms[room.roomName] = {
                 numPlayers: 0,
                 players: [undefined, undefined],
-                viewers: [], board: [], currentPlayer: 0
+                viewers: [], board: []
             };
         }
         if (rooms[room.roomName].numPlayers < 2) { //new room
@@ -61,24 +61,14 @@ io.on('connection', function(socket) {
         }
     });
     socket.on('player-move', function(updates){
-        //updates: {room: $("#room").html(), board: board}
         var room = rooms[updates.room];
-        room.currentPlayer = (room.currentPlayer==0)?1:0;
         room.board = updates.board;
-        
-        io.to(roomName).emit("update-room", updates.coords);
-
-        /*for (var i in room.viewers) {
-            var viewerSocket = room.viewers[i];
-            viewerSocket.emit("update-room", updates.coords);
-        }*/
+        io.to(updates.room).emit("update-room", updates.coords);
     });
 
     socket.on('reset-room', function(roomName){
         var room = rooms[roomName];
-        var nextPlayer = (room.currentPlayer==0)?1:0;
         rooms[roomName].board = [];
-        rooms[roomName].currentPlayer = 0;
         io.to(roomName).emit('reset-room');
     });
 
