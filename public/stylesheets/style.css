@@ -1,29 +1,41 @@
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: #FFDA82;
 }
 
 a {
   color: #00B7FF;
 }
-
-table#board {
-    width: 300px;
-    height: 300px;
+.container {
+    background-color: #FFE6AC;
+    padding-bottom: 15%;
+    margin-bottom: 15%;
+    padding-right: 15%;
+    padding-left: 15%;
 }
-table#board td {
+
+#board {
+    display:block;
+    background-color: white;
+}
+#board div.cell {
+    background-color: white;
     border: black;
     border-style: solid;
-    border-width: medium;
+    border-width: thin;
     text-align: center;
     vertical-align: middle;
+    width: 15%;
+    padding-bottom: 15%;
+    float: left;
 }
 
-table#board td.clicked {
+#board div.clicked {
     background-color: red;
 }
 
-table#board td.square {
+#board div.square {
     background-color: green;
 }
 

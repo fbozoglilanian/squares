@@ -82,10 +82,10 @@ function restart() {
 
 function loadBoard() {
     for (var i = 1; i <= boardLength; i++) {
-        $("#board").append("<tr></tr>");
+        $("#board").append("<div class=\"cellrow\"></div>");
         for (var j = 1; j <= boardLength; j++) {
             var id = i + "_" + j;
-            $($("#board tr")[(i-1)]).append("<td id=\"" + id + "\"></td>");
+            $($("#board div.cellrow")[(i-1)]).append("<div id=\"" + id + "\" class=\"col-md-1 cell\"></div>");
         }
     }
 }
@@ -93,7 +93,7 @@ function loadBoard() {
 
 
 function setBoardEvents() {
-    $('table#board td').each(function(i, td) {
+    $('#board div.cell').each(function(i, td) {
         var id = $(td).attr("id");
         var val = $(td).html();
         var coords = getCellCoords(id);
@@ -202,9 +202,9 @@ function getCurrentPlayerId() {
 }
 
 function changePlayerTurn() {
-    $("#player_item_" + playerTurn).removeClass("alert-info");
+    $("#player_item_" + playerTurn).removeClass("alert-success");
     playerTurn = (playerTurn==1)?0:1;
-    $("#player_item_" + playerTurn).addClass("alert-info");
+    $("#player_item_" + playerTurn).addClass("alert-success");
 }
 
 function cellClicked(cell) {
