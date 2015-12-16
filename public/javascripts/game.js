@@ -1,6 +1,7 @@
 var board = [];
 var playerTurn = 1;
 var boardLength = 6;
+var freeCells = 0;
 //var socket = io.connect('http://192.168.2.3:8080');
 var socket;
 
@@ -32,7 +33,7 @@ $(function() {
         for (var i in players) {
             var player = players[i];
             $("#player_item_" + player.playerId).show();
-            $("#player_name_" + player.playerId).html(player.playerName + ": ");
+            $("#player_name_" + player.playerId).html(player.playerName);
         }
         if (players.length == 1) {
             $("#board").hide();
@@ -71,6 +72,7 @@ function hidePlayerList() {
 
 function restart() {
     board = [];
+    freeCells = 0;
     $("#board").empty();
     playerTurn = 1;
     changePlayerTurn();
@@ -86,6 +88,7 @@ function loadBoard() {
         for (var j = 1; j <= boardLength; j++) {
             var id = i + "_" + j;
             $($("#board div.cellrow")[(i-1)]).append("<div id=\"" + id + "\" class=\"col-md-1 cell\"></div>");
+            freeCells++;
         }
     }
 }
@@ -129,6 +132,18 @@ function updateBoard(coords) {
     board[coords[0]][coords[1]].clicked = true;
     $("#" + id).addClass("clicked");
     makesASquare(coords);
+    freeCells--;
+    if (freeCells == 0) {
+        var player0Pts = parseInt($("#points_0").html());
+        var player1Pts = parseInt($("#points_1").html());
+        if (player0Pts == player1Pts) {
+            alert("Draw!");
+        } else if (player0Pts < player1Pts) {
+            alert($("#player_name_0").html() + " Wins!");
+        } else {
+            alert($("#player_name_1").html() + " Wins!");
+        }
+    }
 }
 
 
@@ -183,6 +198,7 @@ function makesASquare(coords) {
         });
         addCurrentPlayerPoints(4);
     } else {
+        addCurrentPlayerPoints(1);
         changePlayerTurn();
     }
 }
