@@ -172,15 +172,17 @@ function makesASquare(coords) {
     while (i < cuadrants.length && !found) {
         found = true;
         var j = 0;
-        $(cuadrants[i]).each(function(i, coords){
-            partialSolution = solution;
-            if (board[coords.x] != undefined) {
-                var cell = board[coords.x][coords.y];
-                if (cell != undefined && cell.square == null) {
-                    found = found && cellClicked(cell);
-                    if (found) {
-                        partialSolution.push(coords);
-                        j++;
+        $(cuadrants[i]).each(function(i, coords) {
+            if (!(found && j == 3)) {
+                partialSolution = solution;
+                if (board[coords.x] != undefined) {
+                    var cell = board[coords.x][coords.y];
+                    if (cell != undefined && cell.square == null) {
+                        found = found && cellClicked(cell);
+                        if (found) {
+                            partialSolution.push(coords);
+                            j++;
+                        }
                     }
                 }
             }
