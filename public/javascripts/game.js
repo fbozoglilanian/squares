@@ -168,26 +168,30 @@ function makesASquare(coords) {
     var i = 0;
     var solution = [{x: coords[0], y:coords[1]}];
     var partialSolution;
-
+    var points = 0;
     while (i < cuadrants.length && !found) {
         found = true;
         var j = 0;
+        partialSolution = solution.slice(0);
         $(cuadrants[i]).each(function(i, coords) {
-            if (!(found && j == 3)) {
-                partialSolution = solution;
-                if (board[coords.x] != undefined) {
-                    var cell = board[coords.x][coords.y];
-                    if (cell != undefined && cell.square == null) {
-                        found = found && cellClicked(cell);
-                        if (found) {
-                            partialSolution.push(coords);
-                            j++;
-                        }
+            if (board[coords.x] != undefined) {
+                var cell = board[coords.x][coords.y];
+                if (cell != undefined && cell.square == null) {
+                    found = found && cellClicked(cell);
+                    if (found) {
+                        partialSolution.push(coords);
+                        j++;
                     }
                 }
             }
+            console.log(partialSolution);
         });
+
         found = found && j == 3;
+        if (found) {
+            points += j + 1;
+            solution = partialSolution;
+        }
         i++;
     }
     if (found) {
