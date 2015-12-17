@@ -3,8 +3,10 @@
 Play on https://squaresgame.herokuapp.com/
 
 Make as many squares as you can and compete with your family and friends.
-How to play?
-1. Create or join a room by name
+
+## How to play?
+
+1. Create or join a room by name.
 2. Invite other friends by sending the page url.
 3. Create as many groups of 4 squares as possible until completing the wall.
 
