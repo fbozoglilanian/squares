@@ -1,5 +1,5 @@
 body {
-  padding: 50px;
+  padding: 1%;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   background-color: #FFDA82;
 }
@@ -7,12 +7,15 @@ body {
 a {
   color: #00B7FF;
 }
+div.page-header img {
+    max-width: 25%;
+}
 .container {
     background-color: #FFE6AC;
     padding-bottom: 15%;
     margin-bottom: 15%;
-    padding-right: 10%;
-    padding-left: 10%;
+    padding-right: 5%%;
+    padding-left: 5%;
 }
 
 #board {
