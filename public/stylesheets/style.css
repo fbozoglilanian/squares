@@ -12,10 +12,16 @@ div.page-header img {
 }
 .container {
     background-color: #FFE6AC;
-    padding-bottom: 15%;
     margin-bottom: 15%;
     padding-right: 5%%;
     padding-left: 5%;
+}
+
+footer {
+    padding-top: 15%;
+    padding-bottom: 1%;
+    text-align: center;
+    color: gray;
 }
 
 #board {
