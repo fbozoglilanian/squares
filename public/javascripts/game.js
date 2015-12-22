@@ -89,7 +89,6 @@ function getCellCoords(id) {
 }
 
 function cellClick() {
-    console.log(getCurrentPlayerId(), playerId, $(this));
     if (playerId == getCurrentPlayerId()) {
         $(this).unbind('click');
         var id = $(this).attr("id");

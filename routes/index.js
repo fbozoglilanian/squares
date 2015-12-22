@@ -9,7 +9,7 @@ router.get("/", function(req, res, next) {
 
 router.get("/s", function(req, res, next) {
     res.render('singleplayer', {   title: 'Squares!',
-                                    room: req.params[0] });
+                                    room: 'Single Player' });
 });
 
 router.get(/^\/m\/(\w+)$/, function(req, res, next) {

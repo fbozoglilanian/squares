@@ -1,5 +1,4 @@
 function connect() {
-    socket = io.connect();
 }
 function setRestartButtonEvent() {
     $("#restart").click(function() {
@@ -26,33 +25,69 @@ function cellClickEvent(roomName, board, coords) {
 }
 
 function computerPlayer() {
-
-    findBestGreedyMove();
+    if (getCurrentPlayerId() == 1) {
+        var coords = findBestGreedyMove(false);
+        if (coords != null) {
+            cellClickEvent($("#room").html(), board, coords);
+        }
+    }
 }
 
 
-function findBestGreedyMove() {
-    if (getCurrentPlayerId() == 1) {
-        var i = 1;
-        var coords = null;
-        var solution = null;
-        while (i < board.length && solution == null) {
-            var j = 1;
-            while (j < board[i].length && solution == null) {
-                var cell = board[i][j];
-                if (!cell.clicked) {
+function findBestGreedyMove(checkOnlyPossibleSquares) {
+    var i = 1;
+    var coords = null;
+    var solution = null;
+    while (i < board.length && solution == null) {
+        var j = 1;
+        while (j < board[i].length && solution == null) {
+            var cell = board[i][j];
+            if (!cell.clicked) {
+                if (!checkOnlyPossibleSquares) {
                     if (coords == null) {
                         coords = [i, j];
                     }
-                    solution = makesASquare([i, j]);
-                    if (solution != null) {
-                        coords = [i, j];
+                }
+
+                solution = makesASquare([i, j]);
+                if (solution != null) {
+                    coords = [i, j];
+                }
+                if (!checkOnlyPossibleSquares) {
+                    if (solution == null && giftToThePlayer([i, j])) {
+                        coords = null;
                     }
+                }
+
+            }
+            j++;
+        }
+        i++;
+    }
+    if (!checkOnlyPossibleSquares && coords == null) {
+        //it's a trap! well played
+        var i = 1;
+        while (i < board.length) {
+            var j = 1;
+            while (j < board[i].length) {
+                var cell = board[i][j];
+                if (!cell.clicked) {
+                    coords = [i, j];
                 }
                 j++;
             }
             i++;
         }
-        cellClickEvent($("#room").html(), board, coords);
     }
+
+    return coords;
+}
+
+function giftToThePlayer(coords) {
+    if (freeCells <= 2) return false;
+    var isAGift = false;
+    board[coords[0]][coords[1]].clicked = true;
+    isAGift = findBestGreedyMove(true) != null;
+    board[coords[0]][coords[1]].clicked = false;
+    return isAGift;
 }
