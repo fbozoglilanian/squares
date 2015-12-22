@@ -1,0 +1,26 @@
+extends layout
+
+block content
+  div.row
+    div.col-md-8
+        h3
+            span= "Room: "
+            span(id='room')= room
+  div.row
+    div.col-md-4
+
+        ul.list-group
+            li(id="player_item_0").alert.list-group-item
+                span.glyphicon.glyphicon-user
+                span(id="player_name_0")
+                span(id="points_0").badge 0
+            li(id="player_item_1").alert.list-group-item
+                span.glyphicon.glyphicon-user
+                span(id="player_name_1")
+                span(id="points_1").badge 0
+        button(id='restart').btn.btn-warning Restart
+    div.col-md-4
+        p(id='message').alert.alert-dismissible.alert-info
+        div(id='board')
+  script(src='/javascripts/game.js')
+  script(src='/javascripts/singleplayer.js')

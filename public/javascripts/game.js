@@ -2,68 +2,43 @@ var board = [];
 var playerTurn = 1;
 var boardLength = 6;
 var freeCells = 0;
-//var socket = io.connect('http://192.168.2.3:8080');
-var socket;
 
 var playerId = null;
 var playerName = "Me";
 
 $(function() {
     $("#message").hide();
+    connect();
+    hidePlayerList();
+    setRestartButtonEvent();
+    setPlayerName();
+    enterRoom();
+});
 
-    socket = io.connect();
+function updatePlayerList(players) {
+    hidePlayerList();
+    for (var i in players) {
+        var player = players[i];
+        $("#player_item_" + player.playerId).show();
+        $("#player_name_" + player.playerId).html(player.playerName);
+    }
+    if (players.length == 1) {
+        $("#board").hide();
+        $("#message").show();
+        $("#message").html("Waiting for more players...");
+    } else {
+        $("#board").show();
+        $("#message").empty();
+        $("#message").hide();
+    }
+}
+
+function setPlayerName() {
     playerName = prompt("Your Name");
     if (playerName == null || playerName == "") {
-        playerName = "";
+        setPlayerName();
     }
-    hidePlayerList();
-
-    $("#restart").click(function() {
-        if (playerId == getCurrentPlayerId()) {
-            socket.emit('reset-room', $("#room").html());
-        }
-    });
-    socket.emit('enter-room', {
-                        roomName: $("#room").html(),
-                        playerName: playerName
-                    });
-
-    socket.on('update-player-list', function(players) {
-        hidePlayerList();
-        for (var i in players) {
-            var player = players[i];
-            $("#player_item_" + player.playerId).show();
-            $("#player_name_" + player.playerId).html(player.playerName);
-        }
-        if (players.length == 1) {
-            $("#board").hide();
-            $("#message").show();
-            $("#message").html("Waiting for more players...");
-        } else {
-            $("#board").show();
-            $("#message").empty();
-            $("#message").hide();
-        }
-    });
-    socket.on('player-id', function(player){
-        if (player.id == "viewer") {
-            //$("#playerMode").html("Viewer");
-            //$("#restart").hide();
-            alert("This room is full!");
-            $(location).attr('href', '/');
-        } else {
-            $("#playerMode").empty();
-            playerId = player.id;
-            $("#localPlayer_" + player.id).addClass("playerSession");
-        }
-    });
-    socket.on("update-room", function(coords) {
-        updateBoard(coords);
-    });
-    socket.on("reset-room", function(coords) {
-        restart();
-    });
-});
+}
 
 function hidePlayerList() {
     $("#player_item_0").hide();
@@ -114,15 +89,13 @@ function getCellCoords(id) {
 }
 
 function cellClick() {
+    console.log(getCurrentPlayerId(), playerId, $(this));
     if (playerId == getCurrentPlayerId()) {
         $(this).unbind('click');
         var id = $(this).attr("id");
         var coords = getCellCoords(id);
         if (!board[coords[0]][coords[1]].clicked) {
-            socket.emit('player-move', {room: $("#room").html(),
-                                        board: board,
-                                        coords: coords
-                                        });
+            cellClickEvent($("#room").html(), board, coords);
         }
     }
 }
@@ -131,7 +104,19 @@ function updateBoard(coords) {
     var id = coords[0] + "_" + coords[1];
     board[coords[0]][coords[1]].clicked = true;
     $("#" + id).addClass("clicked");
-    makesASquare(coords);
+    var solution = makesASquare(coords);
+    if (solution != null) {
+        $(solution).each(function(i, coords) {
+            var id = "#" + coords.x + "_" + coords.y;
+            board[coords.x][coords.y].square = solution;
+            $(id).removeClass("clicked");
+            $(id).addClass("square");
+        });
+        addCurrentPlayerPoints(4);
+    } else {
+        addCurrentPlayerPoints(1);
+        changePlayerTurn();
+    }
     freeCells--;
     if (freeCells == 0) {
         var player0Pts = parseInt($("#points_0").html());
@@ -184,7 +169,6 @@ function makesASquare(coords) {
                     }
                 }
             }
-            console.log(partialSolution);
         });
 
         found = found && j == 3;
@@ -194,18 +178,11 @@ function makesASquare(coords) {
         }
         i++;
     }
+
     if (found) {
-        solution = partialSolution;
-        $(solution).each(function(i, coords) {
-            var id = "#" + coords.x + "_" + coords.y;
-            board[coords.x][coords.y].square = solution;
-            $(id).removeClass("clicked");
-            $(id).addClass("square");
-        });
-        addCurrentPlayerPoints(4);
+        return partialSolution;
     } else {
-        addCurrentPlayerPoints(1);
-        changePlayerTurn();
+        return null;
     }
 }
 
