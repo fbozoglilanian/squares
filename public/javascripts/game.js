@@ -138,7 +138,7 @@ function updateBoard(coords) {
         var player1Pts = parseInt($("#points_1").html());
         if (player0Pts == player1Pts) {
             alert("Draw!");
-        } else if (player0Pts < player1Pts) {
+        } else if (player0Pts > player1Pts) {
             alert($("#player_name_0").html() + " Wins!");
         } else {
             alert($("#player_name_1").html() + " Wins!");
