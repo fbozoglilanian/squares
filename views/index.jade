@@ -4,13 +4,18 @@ block content
   div.row
     div.col-md-8
         div.panel.panel-warning
-            div.panel-heading= "Start playing!"
+            div.panel-heading= "Play with friends"
             div.panel-body
                 form(method='post', id='roomNameForm')
                     div.form-group
                         label(for='roomName') Room Name:
                         input(id='roomName', type="text", name='roomName').form-control
                     button(type='submit').btn.btn-default Go!
+        div.panel.panel-warning
+            div.panel-heading= "Or play alone"
+            div.panel-body
+                p Try to beat your computer in a single player game.
+                a(href='/s') Click to play!
     div.col-md-4
         div.panel.panel-warning
             div.panel-heading= "How to play"
