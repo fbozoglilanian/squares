@@ -26,10 +26,12 @@ function cellClickEvent(roomName, board, coords) {
 
 function computerPlayer() {
     if (getCurrentPlayerId() == 1) {
-        var coords = findBestGreedyMove(false);
-        if (coords != null) {
-            cellClickEvent($("#room").html(), board, coords);
-        }
+        setTimeout(function(){
+            var coords = findBestGreedyMove(false);
+            if (coords != null) {
+                cellClickEvent($("#room").html(), board, coords);
+            }
+        }, 1000);
     }
 }
 
