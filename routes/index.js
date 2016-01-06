@@ -12,6 +12,11 @@ router.get("/s", function(req, res, next) {
                                     room: 'Single Player' });
 });
 
+router.post("/s", function(req, res, next) {
+    res.render('singleplayer', {   title: 'Squares!',
+                                    room: 'Single Player' });
+});
+
 router.get(/^\/m\/(\w+)$/, function(req, res, next) {
     res.render('multiplayer', {   title: 'Squares!',
                                     room: req.params[0] });
