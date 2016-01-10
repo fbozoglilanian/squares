@@ -150,13 +150,13 @@ function makesASquare(coords) {
                     {x: coords[0]+1, y:coords[1]}]);
     var found = false;
     var i = 0;
-    var solution = [{x: coords[0], y:coords[1]}];
     var partialSolution;
+    var solution = [];
     var points = 0;
-    while (i < cuadrants.length && !found) {
+    while (i < cuadrants.length) {
         found = true;
         var j = 0;
-        partialSolution = solution.slice(0);
+        partialSolution = [{x: coords[0], y:coords[1]}];
         $(cuadrants[i]).each(function(i, coords) {
             if (board[coords.x] != undefined) {
                 var cell = board[coords.x][coords.y];
@@ -173,13 +173,16 @@ function makesASquare(coords) {
         found = found && j == 3;
         if (found) {
             points += j + 1;
-            solution = partialSolution;
+            for (var k in partialSolution) {
+                solution.push(partialSolution[k]);
+            }
+
         }
         i++;
     }
 
-    if (found) {
-        return partialSolution;
+    if (solution.length > 0) {
+        return solution;
     } else {
         return null;
     }
