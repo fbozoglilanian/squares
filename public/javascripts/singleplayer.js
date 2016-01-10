@@ -40,25 +40,35 @@ function findBestGreedyMove(checkOnlyPossibleSquares) {
     var i = 1;
     var coords = null;
     var solution = null;
+    var bestSolution = 0;
+    var possibleSolutions = [];
     while (i < board.length && solution == null) {
         var j = 1;
         while (j < board[i].length && solution == null) {
+            var points = 0;
             var cell = board[i][j];
             if (!cell.clicked) {
                 if (!checkOnlyPossibleSquares) {
-                    if (coords == null) {
-                        coords = [i, j];
-                    }
+                    coords = [i, j];
+                    points = 1;
                 }
 
                 solution = makesASquare([i, j]);
                 if (solution != null) {
                     coords = [i, j];
+                    points = solution.points;
                 }
                 if (!checkOnlyPossibleSquares) {
                     if (solution == null && giftToThePlayer([i, j])) {
                         coords = null;
+                        points = 0;
                     }
+                }
+                if (coords != null && points > bestSolution) {
+                    possibleSolutions = [coords];
+                    bestSolution = points;
+                } else if (coords != null && points == bestSolution) {
+                    possibleSolutions.push(coords);
                 }
 
             }
@@ -66,7 +76,7 @@ function findBestGreedyMove(checkOnlyPossibleSquares) {
         }
         i++;
     }
-    if (!checkOnlyPossibleSquares && coords == null) {
+    if (!checkOnlyPossibleSquares && possibleSolutions.length == 0) {
         //it's a trap! well played
         var i = 1;
         while (i < board.length) {
@@ -74,15 +84,15 @@ function findBestGreedyMove(checkOnlyPossibleSquares) {
             while (j < board[i].length) {
                 var cell = board[i][j];
                 if (!cell.clicked) {
-                    coords = [i, j];
+                    possibleSolutions = [[i, j]];
                 }
                 j++;
             }
             i++;
         }
     }
-
-    return coords;
+    console.log(possibleSolutions);
+    return possibleSolutions[Math.floor(Math.random()*possibleSolutions.length)];;
 }
 
 function giftToThePlayer(coords) {

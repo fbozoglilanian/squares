@@ -105,13 +105,13 @@ function updateBoard(coords) {
     $("#" + id).addClass("clicked");
     var solution = makesASquare(coords);
     if (solution != null) {
-        $(solution).each(function(i, coords) {
+        $(solution.solution).each(function(i, coords) {
             var id = "#" + coords.x + "_" + coords.y;
-            board[coords.x][coords.y].square = solution;
+            board[coords.x][coords.y].square = solution.solution;
             $(id).removeClass("clicked");
             $(id).addClass("square");
         });
-        addCurrentPlayerPoints(4);
+        addCurrentPlayerPoints(solution.points);
     } else {
         addCurrentPlayerPoints(1);
         changePlayerTurn();
@@ -182,7 +182,7 @@ function makesASquare(coords) {
     }
 
     if (solution.length > 0) {
-        return solution;
+        return {solution: solution, points: points};
     } else {
         return null;
     }
